@@ -1,1 +1,1 @@
-body{font-size:16px;margin:0}.page__container{max-width:960px;margin:0 auto}
+body{font-size:16px;margin:0}.page__container{max-width:960px;margin:0 auto;padding:0 0 60px}@media screen and (min-width:1280px){.page__container{max-width:1280px}}.pageList.-day .pageList__items{display:flex;flex-flow:row wrap;justify-content:flex-start;align-items:stretch;margin:0 -16px}.pageList.-day .pageList__item{flex:50% 0 0;padding:24px 16px 0;box-sizing:border-box}
