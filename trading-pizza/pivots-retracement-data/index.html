@@ -11,25 +11,42 @@
       <div class="chart__container">
         <canvas id="totalChart"></canvas>
       </div>
-      <div class="pageList -day">
-        <div class="pageList__items">
-          <div class="pageList__item">
-            <canvas id="monChart"></canvas>
-          </div>
-          <div class="pageList__item">
-            <canvas id="tusChart"></canvas>
-          </div>
-          <div class="pageList__item">
-            <canvas id="wedChart"></canvas>
-          </div>
-          <div class="pageList__item">
-            <canvas id="thuChart"></canvas>
-          </div>
-          <div class="pageList__item">
-            <canvas id="friChart"></canvas>
+      <section class="pageBlock">
+        <div class="pageBlock__inner">
+          <h2 class="pageBlock__head"><span>曜日別データ</span></h2>
+          <div class="pageList -day">
+            <div class="pageList__items">
+              <div class="pageList__item">
+                <canvas id="monChart"></canvas>
+              </div>
+              <div class="pageList__item">
+                <canvas id="tusChart"></canvas>
+              </div>
+              <div class="pageList__item">
+                <canvas id="wedChart"></canvas>
+              </div>
+              <div class="pageList__item">
+                <canvas id="thuChart"></canvas>
+              </div>
+              <div class="pageList__item">
+                <canvas id="friChart"></canvas>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+      <section class="pageBlock">
+        <div class="pageBlock__inner">
+          <h2 class="pageBlock__head"><span>イベント別データ</span></h2>
+          <div class="pageList -day">
+            <div class="pageList__items">
+              <div class="pageList__item">
+                <canvas id="fomcChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </body>
 </html>
