@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap');
+
+html {
+  font-size: 62.5%;
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.7;
+}
+
+body {
+  margin: 0;
+  background-color: #fafbfc;
+}
+
+.container {
+  width: 600px;
+  margin: 0 auto;
+  padding: 32px 0 0;
+}
+
+textarea {
+  width: 100%;
+  height: 250px;
+  padding: 8px;
+  resize: vertical;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  border-radius: 2px;
+  background-color: #fff;
+  border: 1px solid #000;
+  box-sizing: border-box;
+}
+
+.block.-input {
+  display: none;
+}
+
+body[data-selected="anago"] .block.-input {
+  display: block;
+}
+
+.block h2 {
+  display: inline-block;
+  margin: 0 0 0 12px;
+  padding: 6px 16px 6px 34px;
+  border: 1px solid black;
+  border-width: 1px 1px 0 1px;
+  border-radius: 2px 2px 0 0;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: left 12px center;
+  background-color: #fff;
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1;
+  vertical-align: bottom;
+  user-select: none;
+}
+
+.block.-input h2 {
+  background-image: url(../images/icon-write.svg);
+}
+
+.block.-pine h2 {
+  background-image: url(../images/icon-pine.svg);
+}
+
+.block.-file h2 {
+  background-image: url(../images/icon-upload.svg);
+}
+
+button {
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/**
+ *
+ */
+.block.-buttons {
+  position: relative;
+  padding: 16px 0 32px;
+  text-align: center;
+}
+
+.block.-buttons button {
+  padding: 10px 14px;
+  line-height: 16px;
+}
+
+/**
+ * Block pine
+ */
+.block.-pine {
+  position: relative;
+}
+
+.block.-pine button {
+  position: absolute;
+  top: calc(26px + 10px);
+  right: 10px;
+  margin: 0 0 0 8px;
+  opacity: 0;
+  transition: opacity .2s ease .1s;
+  padding: 10px 10px;
+}
+
+.block.-pine button img {
+  width: 16px;
+  height: 16px;
+  vertical-align: bottom;
+}
+
+.block.-pine:hover button {
+  opacity: 1;
+}
+
+.block.-pine #output {
+  font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+}
+
+/**
+ * Block File
+ */
+.block.-file {
+  display: none;
+  padding: 0 0 32px;
+}
+
+.block.-file .upload {
+  padding: 16px 8px;
+  border: 1px solid #000;
+  background-color: #fff;
+}
+
+body[data-selected="tester"] .block.-file {
+  display: block;
+}
+
+/**
+ * Block File
+ */
+.block.-nav {
+  padding: 0 0 24px;
+}
+
+.block.-nav label {
+  margin: 0 8px 0 0;
+  font-size: 1.6rem;
+}
+
+/**
+ * Block Message
+ */
+.block.-message {
+  padding: 8px 0 16px;
+  font-size: 1.4rem;
+}
