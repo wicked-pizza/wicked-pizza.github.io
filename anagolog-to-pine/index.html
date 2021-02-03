@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robot" content="noindex">
+    <title>【:3ω → Pine</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="block -nav">
+        <label for="anago">
+          <input type="radio" name="type" id="anago" checked/>
+          <span>あなごちゃん</span>
+        </label>
+        <label for="tester">
+          <input type="radio" name="type" id="tester"/>
+          <span>聖杯テスター</span>
+        </label>
+      </div>
+
+      <div class="block -input">
+        <h2>動作ログを貼り付け</h2>
+        <textarea id="input" name="input"></textarea>
+
+        <div class="block -buttons">
+          <button id="button">変換する</button>
+        </div>
+      </div>
+
+      <div class="block -file">
+        <h2>ファイルのアップロード</h2>
+        <div class="upload">
+          <input type="file" name="file" id="file"/>
+        </div>
+      </div>
+
+      <div class="block -pine">
+        <h2>Pine Script</h2>
+        <textarea id="output" name="output"></textarea>
+        <button id="copy" title="クリップボードにコピーする">
+          <img src="./assets/images/icon-copy.svg" alt="クリップボードにコピーする"/>
+        </button>
+      </div>
+
+      <div class="block -message" id="message">
+
+      </div>
+    </div>
+    <script src="./assets/js/libs.js"></script>
+    <script src="./assets/js/init.js"></script>
+    <script src="./assets/js/file.js"></script>
+    <script src="./assets/js/main.js"></script>
+  </body>
+</html>
