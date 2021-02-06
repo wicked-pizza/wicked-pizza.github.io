@@ -43,9 +43,11 @@ function trimArray (row) {
   return row.split('\n').map(x => x.trim()).filter(x => !!x)
 }
 
-function createOutputData (startTime, buyEntry, buyExit, sellEntry, sellExit, autoPosKeep, autoPosNone) {
+const anago = '【:3ω'
+
+function createOutputData (startTime, buyEntry, buyExit, sellEntry, sellExit, autoPosKeep, autoPosNone, name) {
   return `//@version=4
-study("あなごちゃん履歴", "【:3ω ", overlay=true, max_lines_count=500)
+study("${name}", overlay=true, max_lines_count=500)
 
 show_Line = input(true, "Lines")
 show_Autopos = input(true, "ポジション自動調整")

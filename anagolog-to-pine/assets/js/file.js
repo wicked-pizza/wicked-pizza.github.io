@@ -9,11 +9,13 @@ function getFile () {
   const fileData = this.files[0]
   const reader = new FileReader()
 
+
   reader.onerror = function () {
     alert('ファイルの読み込みに失敗しました')
   }
 
   reader.onload = function() {
+    const name = '聖杯テスター履歴: ' + fileData.name.replace(/.csv$/, '')
     const rows = trimArray(reader.result)
     rows.shift()
 
@@ -51,7 +53,7 @@ function getFile () {
     sellEntries = sellEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
     sellExits = sellExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
 
-    const outputData = createOutputData([], buyEntries, buyExits, sellEntries, sellExits, [], [])
+    const outputData = createOutputData([], buyEntries, buyExits, sellEntries, sellExits, [], [], name)
 
     exports(outputData)
   }

@@ -71,7 +71,7 @@ function start () {
   autoPosNone = autoPosNone.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   outofspreads = outofspreads.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
 
-  const outputData = createOutputData(startTime, buyEntries, buyExits, sellEntries, sellExits, autoPosKeep, autoPosNone)
+  const outputData = createOutputData(startTime, buyEntries, buyExits, sellEntries, sellExits, autoPosKeep, autoPosNone, 'あなごちゃん履歴')
 
   exports(outputData)
 }
