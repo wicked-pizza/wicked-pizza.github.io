@@ -69,12 +69,29 @@ function getFile (files) {
       return /closesell/.exec(x.message)
     })
 
+    startTime = []
+    stopTime = []
+    suspention = []
     buyEntries = buyEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
     buyExits = buyExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
     sellEntries = sellEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
     sellExits = sellExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
+    sfd = []
 
-    const outputData = createOutputData([], buyEntries, buyExits, sellEntries, sellExits, [], [], name)
+    const outputData = createOutputData(
+      startTime,
+      stopTime,
+      suspention,
+      buyEntries,
+      buyExits,
+      sellEntries,
+      sellExits,
+      [],
+      [],
+      [],
+      sfd,
+      name
+    )
 
     exports(outputData)
   }
