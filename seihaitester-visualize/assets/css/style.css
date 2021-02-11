@@ -190,6 +190,7 @@ body[data-selected="tester"] .block.-file {
  * Box title
  */
 .box.-title {
+  margin: 0 16px 0 0;
   font-size: 1.4rem;
   line-height: 17px;
 }
