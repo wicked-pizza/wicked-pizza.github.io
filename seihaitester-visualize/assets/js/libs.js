@@ -1,16 +1,19 @@
 let exportsData = null
 const myTimezone = '+0900'
-const copyButton = document.getElementById('copy')
 const msg = document.getElementById('message')
 
-copyButton.addEventListener('click', () => {
-  copy(exportsData)
-})
-
+/**
+ * Exports
+ * @param data
+ */
 function exports (data) {
   output.innerHTML = exportsData = data
 }
 
+/**
+ * Copy
+ * @param data
+ */
 function copy (data) {
   if (!data) {
     return alert('コピーするデータが空です')
@@ -22,6 +25,10 @@ function copy (data) {
   }
 }
 
+/**
+ * Write Message
+ * @param data
+ */
 function writeMessage (data) {
   msg.innerHTML = data
 
@@ -30,6 +37,12 @@ function writeMessage (data) {
   }, 3000)
 }
 
+/**
+ * Get ISO Format
+ * @param x
+ * @param tz
+ * @return {String}
+ */
 function getISOFormat (x, tz) {
   if (!x || typeof x !== 'string') return
 
@@ -39,11 +52,87 @@ function getISOFormat (x, tz) {
     .replace(/T(\d):/, 'T0$1:') + tz
 }
 
+/**
+ * Trim Array
+ * @param row
+ * @return {Array}
+ */
 function trimArray (row) {
   return row.split('\n').map(x => x.trim()).filter(x => !!x)
 }
 
-function createOutputData (startTime, stopTime, suspention, buyEntry, buyExit, sellEntry, sellExit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, sfd, name) {
+/**
+ * Create History Data By Anago
+ * @param list {Array}
+ * @param tz {String}
+ * @return {Array}
+ */
+function createHistoryDataByAnago (list, tz) {
+  let result = []
+  let lastRow = ''
+  let index = 0
+  let useAction = true
+
+  list.forEach((row, i) => {
+    // 日時
+    if (/^\d{4}\//.exec(row)) {
+      lastRow = row
+    } else {
+      const iso = getISOFormat(lastRow, myTimezone)
+      let side = null
+      let type = 'text'
+
+      if (/^\d{6}/.exec(row)) {
+        type = 'price'
+        side = /決済/.exec(list[i-2]) ? 'close' : 'open'
+        if (side === 'open' && /買い/.exec(row)) {
+          side = 'openbuy'
+        } else if (side === 'close' && /売り/.exec(row)) {
+          side = 'closebuy'
+        } else if (side === 'open' && /売り/.exec(row)) {
+          side = 'opensell'
+        } else if (side === 'close' && /買い/.exec(row)) {
+          side = 'closesell'
+        }
+
+        if (useAction) useAction = false
+      } else if (/^ActionType/.exec(row)) {
+        type = 'action'
+        if (/買い:/.exec(row)) {
+          side = 'openbuy'
+        } else if (/買い決済/.exec(row)) {
+          side = 'closebuy'
+        } else if (/売り:/.exec(row)) {
+          side = 'opensell'
+        } else if (/売り決済/.exec(row)) {
+          side = 'closesell'
+        }
+      }
+
+      result.push({
+        time: iso,
+        type: type,
+        message: row,
+        side: side
+      })
+    }
+  })
+
+  result = result.filter(x => !/許容外/.exec(x.message))
+
+  if (!useAction) {
+    return result.filter(x => x.type !== 'action')
+  }
+
+  return result
+}
+
+/**
+ * Create Output Data
+ * @param
+ * @return {String}
+ */
+function createOutputData (startTime, stopTime, suspention, buyEntry, buyHold, buyExit, sellEntry, sellHold, sellExit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, sfd, name) {
   return `//@version=4
 study("${name}", overlay=true, max_lines_count=500)
 
@@ -54,8 +143,10 @@ bool is_StartTime = ${startTime.join(' or ') || 'false'}
 bool is_StopTime = ${stopTime.join(' or ') || 'false'}
 bool is_Suspention = ${suspention.join(' or ') || 'false'}
 bool is_BuyEntry = ${buyEntry.join(' or ') || 'false'}
+bool is_BuyHold = ${buyHold.join(' or ') || 'false'}
 bool is_BuyExit = ${buyExit.join(' or ') || 'false'}
 bool is_SellEntry = ${sellEntry.join(' or ') || 'false'}
+bool is_SellHold = ${sellHold.join(' or ') || 'false'}
 bool is_SellExit = ${sellExit.join(' or ') || 'false'}
 bool is_AutoBuyPosKeep = ${autoBuyPosKeep.join(' or ') || 'false'}
 bool is_AutoSellPosKeep = ${autoSellPosKeep.join(' or ') || 'false'}
@@ -65,6 +156,8 @@ bool is_Sfd = ${sfd.join(' or ') || 'false'}
 plotshape(show_Autopos and is_AutoBuyPosKeep, style=shape.arrowup, color=color.gray, text="買いポジション保有中", textcolor=color.gray, location=location.belowbar, size=size.normal)
 plotshape(show_Autopos and is_AutoSellPosKeep, style=shape.arrowdown, color=color.gray, text="売りポジション保有中", textcolor=color.gray, location=location.abovebar, size=size.normal)
 plotshape(show_Autopos and is_AutoPosNone, style=shape.arrowup, color=color.gray, text="ポジション無し", textcolor=color.gray, location=location.belowbar, size=size.normal)
+plotshape(is_BuyHold, style=shape.arrowup, color=color.blue, text="買いホールド中", textcolor=color.blue, location=location.belowbar, size=size.normal)
+plotshape(is_SellHold, style=shape.arrowdown, color=color.red, text="売りホールド中", textcolor=color.red, location=location.abovebar, size=size.normal)
 plotshape(is_Sfd, style=shape.labeldown, text="SFD", color=color.purple, textcolor=color.white, location=location.bottom, size=size.tiny)
 plotshape(is_Suspention, style=shape.labeldown, text="待機", color=color.purple, textcolor=color.white, location=location.bottom, size=size.tiny)
 plotshape(is_StopTime, style=shape.labeldown, text="停止", color=color.orange, textcolor=color.white, location=location.bottom, size=size.tiny)

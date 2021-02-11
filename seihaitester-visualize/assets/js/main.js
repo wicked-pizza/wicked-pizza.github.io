@@ -13,26 +13,8 @@ function start () {
   }
 
   const title = getTitle()
-  const isMarketEntry = getEntryType() === 'market'
   const list = trimArray(input.value)
-  let historyData = []
-  let lastRow = ''
-  let index = 0
-
-  list.forEach((row) => {
-    if (row.match(/^\d{4}\//)) {
-      lastRow = row
-    } else {
-      const iso = getISOFormat(lastRow, myTimezone)
-
-      historyData.push({
-        time: iso,
-        message: row
-      })
-    }
-  })
-
-  historyData = historyData.filter(x => !/許容外/.exec(x.message))
+  let historyData = createHistoryDataByAnago(list, myTimezone)
 
   startTime = historyData.filter((x) => {
     return /開始ボタン|開始時間になりました/.exec(x.message)
@@ -46,28 +28,28 @@ function start () {
     return /待機/.exec(x.message)
   })
 
-  buyEntries = historyData.filter((x) => {
-    if (isMarketEntry) {
-      return /成り行き買い注文/.exec(x.message)
-    } else {
-      return /買い:/.exec(x.message)
-    }
+  buyEntries = historyData.filter(x => {
+    return x.side === 'openbuy'
   })
 
-  buyExits = historyData.filter((x) => {
-    return /買い決済:/.exec(x.message)
+  buyExits = historyData.filter(x => {
+    return x.side === 'closebuy'
+  })
+
+  buyHold = historyData.filter((x) => {
+    return /買いホールド/.exec(x.message)
   })
 
   sellEntries = historyData.filter((x) => {
-    if (isMarketEntry) {
-      return /成り行き売り注文/.exec(x.message)
-    } else {
-      return /売り:/.exec(x.message)
-    }
+    return x.side === 'opensell'
   })
 
   sellExits = historyData.filter((x) => {
-    return /売り決済:/.exec(x.message)
+    return x.side === 'closesell'
+  })
+
+  sellHold = historyData.filter((x) => {
+    return /売りホールド/.exec(x.message)
   })
 
   autoBuyPosKeep = historyData.filter((x) => {
@@ -90,12 +72,19 @@ function start () {
     return /SFD/.exec(x.message)
   })
 
+  if (title === 'Coincheck') {
+    sellEntries = []
+    sellExits = []
+  }
+
   startTime = startTime.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   stopTime = stopTime.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   suspention = suspention.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   buyEntries = buyEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
+  buyHold = buyHold.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   buyExits = buyExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   sellEntries = sellEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
+  sellHold = sellHold.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   sellExits = sellExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   autoBuyPosKeep = autoBuyPosKeep.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
   autoSellPosKeep = autoSellPosKeep.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
@@ -109,8 +98,10 @@ function start () {
     stopTime,
     suspention,
     buyEntries,
+    buyHold,
     buyExits,
     sellEntries,
+    sellHold,
     sellExits,
     autoBuyPosKeep,
     autoSellPosKeep,
@@ -120,10 +111,6 @@ function start () {
   )
 
   exports(outputData)
-}
-
-function getEntryType () {
-  return document.querySelector('input[name="entry-type"]:checked').getAttribute('id')
 }
 
 function getTitle () {
