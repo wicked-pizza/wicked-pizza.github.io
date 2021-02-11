@@ -157,3 +157,39 @@ body[data-selected="tester"] .block.-file {
   padding: 8px 0 16px;
   font-size: 1.4rem;
 }
+
+/**
+ * Box row
+ */
+.row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  padding: 8px 0 0;
+}
+
+/**
+ * Box entryTYpe
+ */
+.box.-entryType {
+  margin: 0 16px 0 0;
+}
+
+.box.-entryType label {
+  display: inline-block;
+  margin: 0 4px 0 0;
+  font-size: 1.4rem;
+  line-height: 17px;
+}
+
+.box.-entryType input {
+  vertical-align: top;
+}
+
+/**
+ * Box title
+ */
+.box.-title {
+  font-size: 1.4rem;
+  line-height: 17px;
+}
