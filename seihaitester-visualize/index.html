@@ -4,25 +4,49 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="robot" content="noindex">
-    <title>【:3ω → Pine</title>
+    <title>聖杯テスター ポジション可視化</title>
     <link rel="stylesheet" href="./assets/css/style.css">
   </head>
   <body>
     <div class="container">
       <div class="block -nav">
-        <label for="anago">
-          <input type="radio" name="type" id="anago"/>
-          <span>あなごちゃん</span>
-        </label>
         <label for="tester">
-          <input type="radio" name="type" id="tester" checked/>
+          <input type="radio" name="type" id="tester"/>
           <span>聖杯テスター</span>
+        </label>
+        <label for="anago">
+          <input type="radio" name="type" id="anago" checked/>
+          <span>あなごちゃん</span>
         </label>
       </div>
 
       <div class="block -input">
         <h2>動作ログを貼り付け</h2>
         <textarea id="input" name="input"></textarea>
+
+        <div class="row">
+          <div class="box -entryType">
+            <label for="limit">
+              <input name="entry-type" type="radio" id="limit" checked><span>指値</span>
+            </label>
+            <label for="market">
+              <input name="entry-type" type="radio" id="market"><span>成り行き</span>
+            </label>
+          </div>
+
+          <div class="box -title">
+            <select name="title">
+              <option value="">（タイトル）</option>
+              <option value="BitFlyerFX">BitFlyerFX</option>
+              <option value="Lquid">Lquid</option>
+              <option value="Zaif">Zaif</option>
+              <option value="GMO">GMO</option>
+              <option value="coincheck">coincheck</option>
+              <option value="Ducurret">Ducurret</option>
+              <option value="Bitmania">Bitmania</option>
+            </select>
+          </div>
+        </div>
 
         <div class="block -buttons">
           <button id="button">変換する</button>
