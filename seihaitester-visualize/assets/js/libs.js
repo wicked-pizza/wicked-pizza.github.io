@@ -86,6 +86,7 @@ function createHistoryDataByAnago (list, tz) {
       if (/^\d{6}/.exec(row)) {
         type = 'price'
         side = /決済/.exec(list[i-2]) ? 'close' : 'open'
+
         if (side === 'open' && /買い/.exec(row)) {
           side = 'openbuy'
         } else if (side === 'close' && /売り/.exec(row)) {
@@ -101,16 +102,22 @@ function createHistoryDataByAnago (list, tz) {
         type = 'action'
         if (/買い:/.exec(row)) {
           side = 'openbuy'
-        } else if (/買い決済/.exec(row)) {
+        } else if (/買い決済|買い全決済/.exec(row)) {
           side = 'closebuy'
         } else if (/売り:/.exec(row)) {
           side = 'opensell'
-        } else if (/売り決済/.exec(row)) {
+        } else if (/売り決済|売り全決済/.exec(row)) {
           side = 'closesell'
         }
+      } else if (/買い全決済/.exec(row)) {
+        side = 'closebuy'
+      } else if (/売り全決済/.exec(row)) {
+        side = 'closesell'
       } else if (/ポジション無し/.exec(row)) {
         const found = findAction(result, index)
         result[found].side = result[found].side + '-canceled'
+      } else {
+      
       }
 
       result.push({
