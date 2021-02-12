@@ -61,6 +61,9 @@ function trimArray (row) {
   return row.split('\n').map(x => x.trim()).filter(x => !!x)
 }
 
+const re_action = /^ActionType/
+const re_price = /^\d{6}/
+
 /**
  * Create History Data By Anago
  * @param list {Array}
@@ -83,7 +86,7 @@ function createHistoryDataByAnago (list, tz) {
       let side = null
       let type = 'text'
 
-      if (/^\d{6}/.exec(row)) {
+      if (re_price.exec(row)) {
         type = 'price'
         side = /決済/.exec(list[i-2]) ? 'close' : 'open'
 
@@ -98,7 +101,7 @@ function createHistoryDataByAnago (list, tz) {
         }
 
         if (useAction) useAction = false
-      } else if (/^ActionType/.exec(row)) {
+      } else if (re_action.exec(row)) {
         type = 'action'
         if (/買い:/.exec(row)) {
           side = 'openbuy'
@@ -131,6 +134,8 @@ function createHistoryDataByAnago (list, tz) {
 
   result = result.filter(x => !/許容外/.exec(x.message))
 
+  console.log(result)
+
   if (!useAction) {
     return result.filter(x => x.type !== 'action')
   }
@@ -151,7 +156,7 @@ function findAction (array, start) {
     c = start - i
     item = array[c]
     if (!item || !item.message) continue
-    if (/ActionType/.exec(item.message)) {
+    if (re_action.exec(item.message) || re_price.exec(item.message)) {
       if (/close/.exec(item.side)) break
       if (/open/.exec(item.side)) {
         find = c
@@ -239,9 +244,9 @@ plotshape(is_Suspention, style=shape.labeldown, text="待機", color=color.purpl
 plotshape(is_StopTime, style=shape.labeldown, text="停止", color=color.orange, textcolor=color.white, location=location.bottom, size=size.tiny)
 plotshape(is_StartTime, style=shape.labeldown, text="開始", color=color.orange, textcolor=color.white, location=location.bottom, size=size.tiny)
 plotshape(is_BuyEntry, style=shape.labelup, text="買", color=color.blue, textcolor=color.white, location=location.belowbar, size=size.tiny)
-plotshape(is_BuyEntryCanceled, style=shape.labelup, text="買", color=color.gray, textcolor=color.white, location=location.belowbar, size=size.tiny)
+plotshape(is_BuyEntryCanceled, style=shape.labelup, text="買", color=#d9d9d9, textcolor=#777777, location=location.belowbar, size=size.tiny)
 plotshape(is_SellEntry, style=shape.labeldown, text="売", color=color.red, textcolor=color.white, location=location.abovebar, size=size.tiny)
-plotshape(is_SellEntryCanceled, style=shape.labeldown, text="売", color=color.gray, textcolor=color.white, location=location.abovebar, size=size.tiny)
+plotshape(is_SellEntryCanceled, style=shape.labeldown, text="売", color=#d9d9d9, textcolor=#777777, location=location.abovebar, size=size.tiny)
 plotshape(is_BuyExit ? high : na, style=shape.xcross, color=color.blue, location=location.absolute, size=size.tiny)
 plotshape(is_SellExit ? low : na, style=shape.xcross, color=color.red, location=location.absolute, size=size.tiny)
 
