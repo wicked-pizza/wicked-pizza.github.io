@@ -32,6 +32,10 @@ function start () {
     return x.side === 'openbuy'
   })
 
+  buyEntriesCanceled = historyData.filter(x => {
+    return  x.side === 'openbuy-canceled'
+  })
+
   buyExits = historyData.filter(x => {
     return x.side === 'closebuy'
   })
@@ -42,6 +46,10 @@ function start () {
 
   sellEntries = historyData.filter((x) => {
     return x.side === 'opensell'
+  })
+
+  sellEntriesCanceled = historyData.filter(x => {
+    return x.side === 'opensell-canceled'
   })
 
   sellExits = historyData.filter((x) => {
@@ -64,6 +72,18 @@ function start () {
     return /ポジション自動調整/.exec(x.message) && /ポジション無し/.exec(x.message)
   })
 
+  buyOutOfLimit = historyData.filter((x) => {
+    return /買い方向の数量が設定上限/.exec(x.message)
+  })
+
+  sellOutOfLimit = historyData.filter((x) => {
+    return /売り方向の数量が設定上限/.exec(x.message)
+  })
+
+  apiError = historyData.filter((x) => {
+    return /APIエラー/.exec(x.message)
+  })
+
   outofspreads = historyData.filter((x) => {
     return /スプレッド許容外/.exec(x.message)
   })
@@ -77,20 +97,24 @@ function start () {
     sellExits = []
   }
 
-  startTime = startTime.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  stopTime = stopTime.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  suspention = suspention.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  buyEntries = buyEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  buyHold = buyHold.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  buyExits = buyExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  sellEntries = sellEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  sellHold = sellHold.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  sellExits = sellExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  autoBuyPosKeep = autoBuyPosKeep.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  autoSellPosKeep = autoSellPosKeep.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  autoPosNone = autoPosNone.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  outofspreads = outofspreads.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-  sfd = sfd.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
+  startTime = condStatement(startTime)
+  stopTime = condStatement(stopTime)
+  suspention = condStatement(suspention)
+  buyEntries = condStatement(buyEntries)
+  buyEntriesCanceled = condStatement(buyEntriesCanceled)
+  buyHold = condStatement(buyHold)
+  buyExits = condStatement(buyExits)
+  buyOutOfLimit = condStatement(buyOutOfLimit)
+  sellEntries = condStatement(sellEntries)
+  sellEntriesCanceled = condStatement(sellEntriesCanceled)
+  sellHold = condStatement(sellHold)
+  sellExits = condStatement(sellExits)
+  sellOutOfLimit = condStatement(sellOutOfLimit)
+  autoBuyPosKeep = condStatement(autoBuyPosKeep)
+  autoSellPosKeep = condStatement(autoSellPosKeep)
+  autoPosNone = condStatement(autoPosNone)
+  apiError = condStatement(apiError)
+  sfd = condStatement(sfd)
   name = 'あなごちゃん履歴' + (title ? `: ${title}` : '')
 
   const outputData = createOutputData(
@@ -98,14 +122,19 @@ function start () {
     stopTime,
     suspention,
     buyEntries,
+    buyEntriesCanceled,
     buyHold,
     buyExits,
+    buyOutOfLimit,
     sellEntries,
+    sellEntriesCanceled,
     sellHold,
     sellExits,
+    sellOutOfLimit,
     autoBuyPosKeep,
     autoSellPosKeep,
     autoPosNone,
+    apiError,
     sfd,
     name
   )

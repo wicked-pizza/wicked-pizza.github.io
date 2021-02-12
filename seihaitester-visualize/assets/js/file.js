@@ -72,23 +72,33 @@ function getFile (files) {
     startTime = []
     stopTime = []
     suspention = []
-    buyEntries = buyEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-    buyExits = buyExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-    sellEntries = sellEntries.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
-    sellExits = sellExits.map(x => `(time >= timestamp("${x.time}") and time[1] < timestamp("${x.time}"))`)
+    buyEntries = condStatement(buyEntries)
+    buyEntriesCanceled = []
+    buyExits = condStatement(buyExits)
+    buyOutOfLimit = []
+    sellEntries = condStatement(sellEntries)
+    sellEntriesCanceled = []
+    sellExits = condStatement(sellExits)
+    sellOutOfLimit = []
     sfd = []
+    apiError = []
 
     const outputData = createOutputData(
       startTime,
       stopTime,
       suspention,
       buyEntries,
+      buyEntriesCanceled,
       buyExits,
+      buyOutOfLimit,
       sellEntries,
+      sellEntriesCanceled,
       sellExits,
+      sellOutOfLimit,
       [],
       [],
       [],
+      apiError,
       sfd,
       name
     )
