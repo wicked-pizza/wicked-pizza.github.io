@@ -1,8 +1,13 @@
 const menuButtons = document.querySelectorAll('input[name="type"]')
 const copyButton = document.getElementById('copy')
+const clearButton = document.getElementById('clear')
 
 menuButtons.forEach((button) => {
   button.addEventListener('change', setType)
+})
+
+clearButton.addEventListener('click', () => {
+  document.getElementById('input').value = ''
 })
 
 copyButton.addEventListener('click', () => {
