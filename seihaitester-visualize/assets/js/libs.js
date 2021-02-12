@@ -117,7 +117,7 @@ function createHistoryDataByAnago (list, tz) {
         const found = findAction(result, index)
         result[found].side = result[found].side + '-canceled'
       } else {
-      
+
       }
 
       result.push({
@@ -280,13 +280,13 @@ max_bars_back(close, 1000)
 ${buyEntry.length > 0 ? 'max_bars_back(is_BuyEntry, 1000)' : ''}
 ${sellEntry.length > 0 ? 'max_bars_back(is_SellEntry, 1000)' : ''}
 
-if show_Line and is_SellExit
+if show_Line and is_SellExit and not (is_SellExit and is_SellEntry)
     for i = 1 to 1000
         if is_SellEntry[i]
             line.new(bar_index, low, bar_index - i, close[i], color=color.red, width=1, style=line.style_dashed)
             break
 
-if show_Line and is_BuyExit
+if show_Line and is_BuyExit and not (is_BuyExit and is_BuyEntry)
     for i = 1 to 1000
         if is_BuyEntry[i]
             line.new(bar_index, high, bar_index - i, close[i], color=color.blue, width=1, style=line.style_dashed)
