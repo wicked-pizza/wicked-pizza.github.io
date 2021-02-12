@@ -85,8 +85,10 @@ button {
 }
 
 .block.-buttons button {
-  padding: 10px 14px;
+  padding: 16px 40px;
   line-height: 16px;
+  border-radius: 3px;
+  border: 1px solid #666;
 }
 
 /**
@@ -168,23 +170,6 @@ body[data-selected="tester"] .block.-file {
   padding: 8px 0 0;
 }
 
-/**
- * Box entryTYpe
- */
-.box.-entryType {
-  margin: 0 16px 0 0;
-}
-
-.box.-entryType label {
-  display: inline-block;
-  margin: 0 4px 0 0;
-  font-size: 1.4rem;
-  line-height: 17px;
-}
-
-.box.-entryType input {
-  vertical-align: top;
-}
 
 /**
  * Box title
@@ -193,4 +178,23 @@ body[data-selected="tester"] .block.-file {
   margin: 0 16px 0 0;
   font-size: 1.4rem;
   line-height: 17px;
+}
+
+.box.-title select {
+  height: 28px;
+  line-height: 28px;
+  box-sizing: border-box;
+}
+
+/**
+ * Box clear
+ */
+.box.-clear {
+
+}
+
+.box.-clear button {
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
