@@ -246,7 +246,7 @@ if is_Suspention or is_Sfd
 
 // Warning Labels
 if show_Warn and array.size(warnMessages) > 0
-    warnyloc = not is_BuyEntry ? yloc.belowbar : yloc.abovebar
+    warnyloc = not (is_BuyEntry or is_BuyEntryCanceled) ? yloc.belowbar : yloc.abovebar
     warntext = array.join(warnMessages, '\\n')
     label.new(bar_index, na, '⚠️ ' + warntext, color=warncolor, textcolor=warncolor, yloc=warnyloc, style=label.style_arrowup, size=size.small)
 
