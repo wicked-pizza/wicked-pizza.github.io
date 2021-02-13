@@ -1,0 +1,17 @@
+.block h2 {
+  display: inline-block;
+  margin: 0 0 0 12px;
+  padding: 6px 16px 6px 34px;
+  border: 1px solid black;
+  border-width: 1px 1px 0 1px;
+  border-radius: 2px 2px 0 0;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: left 12px center;
+  background-color: #fff;
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1;
+  vertical-align: bottom;
+  user-select: none;
+}

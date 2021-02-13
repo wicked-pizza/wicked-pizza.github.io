@@ -1,0 +1,14 @@
+.layout__row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.layout__cell.-left {
+  flex: 560px 0 0;
+  margin: 0 32px 0 0;
+}
+
+.layout__cell.-right {
+  flex: 300px 0 0;
+}

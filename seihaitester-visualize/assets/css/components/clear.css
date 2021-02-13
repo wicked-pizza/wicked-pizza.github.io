@@ -1,0 +1,12 @@
+/**
+ * Box clear
+ */
+.box.-clear {
+
+}
+
+.box.-clear button {
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
+}

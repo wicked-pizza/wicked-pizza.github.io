@@ -1,0 +1,11 @@
+/**
+ * Block Nav
+ */
+.block.-nav {
+  padding: 0 0 24px;
+}
+
+.block.-nav label {
+  margin: 0 8px 0 0;
+  font-size: 1.6rem;
+}

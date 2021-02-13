@@ -9,68 +9,94 @@
   </head>
   <body>
     <div class="container">
-      <div class="block -nav">
-        <label for="tester">
-          <input type="radio" name="type" id="tester"/>
-          <span>聖杯テスター</span>
-        </label>
-        <label for="anago">
-          <input type="radio" name="type" id="anago" checked/>
-          <span>あなごちゃん</span>
-        </label>
-      </div>
-
-      <div class="block -input">
-        <h2>動作ログを貼り付け</h2>
-        <textarea id="input" name="input"></textarea>
-
-        <div class="row">
-          <div class="box -title">
-            <select name="title">
-              <option value="">（タイトル）</option>
-              <option value="BitFlyerFX">BitFlyerFX</option>
-              <option value="Lquid">Lquid</option>
-              <option value="Zaif">Zaif</option>
-              <option value="GMO">GMO</option>
-              <option value="Coincheck">Coincheck</option>
-              <option value="Ducurret">Ducurret</option>
-              <option value="Bitmania">Bitmania</option>
-            </select>
+      <div class="layout__row">
+        <div class="layout__cell -left">
+          <div class="block -nav">
+            <label for="tester">
+              <input type="radio" name="type" id="tester" />
+              <span>聖杯テスター</span>
+            </label>
+            <label for="anago">
+              <input type="radio" name="type" id="anago" checked/>
+              <span>あなごちゃん</span>
+            </label>
           </div>
-          <div class="box -clear">
-            <button id="clear">
-              クリアする
+
+          <div class="block -input">
+            <h2>動作ログを貼り付け</h2>
+            <textarea id="input" name="input"></textarea>
+
+            <div class="row">
+              <div class="box -title">
+                <select name="title">
+                  <option value="">（タイトル）</option>
+                  <option value="BitFlyerFX">BitFlyerFX</option>
+                  <option value="Liquid">Liquid</option>
+                  <option value="Zaif">Zaif</option>
+                  <option value="GMO">GMO</option>
+                  <option value="Coincheck">Coincheck</option>
+                  <option value="Ducurret">Ducurret</option>
+                  <option value="Bitmania">Bitmania</option>
+                </select>
+              </div>
+              <div class="box -clear">
+                <button id="clear">
+                  クリア
+                </button>
+              </div>
+            </div>
+
+            <div class="block -custom">
+              <h3>カスタムイベント</h3>
+              <textarea id="custom" name="custom">2021-02-14T05:05:55, メッセージ, bitflyer
+2021-02-14T06:05:55, メッセージ, coincheck</textarea>
+              <div class="note">
+                例: <input id="example" type="text" value="2021-02-13T13:05:55, メッセージ, bitflyer"/>
+              </div>
+            </div>
+
+            <div class="block -buttons">
+              <button id="button">変換する</button>
+            </div>
+          </div>
+
+          <div class="block -file">
+            <h2>ファイルのアップロード</h2>
+            <div class="upload" id="dropzone">
+              <input type="file" name="file" id="file" accept="text/csv"/>
+            </div>
+          </div>
+
+          <div class="block -pine">
+            <h2>Pine Script</h2>
+            <textarea id="output" name="output"></textarea>
+            <button id="copy" title="クリップボードにコピーする">
+              <img src="./assets/images/icon-copy.svg" alt="クリップボードにコピーする"/>
             </button>
+            <div class="block -message" id="message">
+
+            </div>
           </div>
         </div>
 
-        <div class="block -buttons">
-          <button id="button">変換する</button>
+        <div class="layout__cell -right">
+          <div class="block -history">
+            <p><b>履歴</b></p>
+            <div class="items" id="history-data">
+
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="block -file">
-        <h2>ファイルのアップロード</h2>
-        <div class="upload" id="dropzone">
-          <input type="file" name="file" id="file" accept="text/csv"/>
-        </div>
-      </div>
-
-      <div class="block -pine">
-        <h2>Pine Script</h2>
-        <textarea id="output" name="output"></textarea>
-        <button id="copy" title="クリップボードにコピーする">
-          <img src="./assets/images/icon-copy.svg" alt="クリップボードにコピーする"/>
-        </button>
-      </div>
-
-      <div class="block -message" id="message">
-
       </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
+    <script src="./assets/js/re.js"></script>
     <script src="./assets/js/libs.js"></script>
+    <script src="./assets/js/libs-parse.js"></script>
     <script src="./assets/js/init.js"></script>
-    <script src="./assets/js/file.js"></script>
-    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/input-file.js"></script>
+    <script src="./assets/js/input-paste.js"></script>
+    <script src="./assets/js/history.js"></script>
   </body>
 </html>

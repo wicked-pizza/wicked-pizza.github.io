@@ -1,0 +1,11 @@
+.block.-input {
+  display: none;
+}
+
+.block.-input h2 {
+  background-image: url(../../images/icon-write.svg);
+}
+
+body[data-selected="anago"] .block.-input {
+  display: block;
+}
