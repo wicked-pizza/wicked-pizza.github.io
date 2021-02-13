@@ -1,0 +1,32 @@
+.block.-custom {
+  margin: 16px 0 0;
+  padding: 0 0 0 40px;
+}
+
+.block.-custom h3 {
+  margin: 0;
+  padding: 0 0 4px 4px;
+  font-size: 1.4rem;
+  line-height: 1.9;
+}
+
+.block.-custom textarea {
+  height: 12em;
+  line-height: 1.9;
+}
+
+.block.-custom .note {
+  font-size: 1.3rem;
+  line-height: 2;
+  color: gray;
+}
+
+.block.-custom input {
+  width: calc(100% - 40px);
+  border: none;
+  outline: none;
+  line-height: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+}

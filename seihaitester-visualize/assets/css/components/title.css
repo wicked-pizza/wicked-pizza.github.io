@@ -1,0 +1,14 @@
+/**
+ * Box title
+ */
+.box.-title {
+  margin: 0 16px 0 0;
+  font-size: 1.4rem;
+  line-height: 17px;
+}
+
+.box.-title select {
+  height: 28px;
+  line-height: 28px;
+  box-sizing: border-box;
+}

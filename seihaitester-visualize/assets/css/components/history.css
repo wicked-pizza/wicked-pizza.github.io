@@ -1,0 +1,49 @@
+.block.-history {
+  position: relative;
+  height: 100%;
+  padding: 0 0 32px;
+  box-sizing: border-box;
+}
+
+.block.-history p {
+
+}
+
+.block.-history .items {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 40px);
+  margin: 0;
+  padding: 16px;
+  background: rgba(0,0,0,.2);
+  border-radius: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.block.-history .item {
+  position: relative;
+  padding: 8px 0;
+  /*border-bottom: 1px solid rgba(255, 255, 255, .3);*/
+  border-bottom: 1px solid rgba(0, 0, 0, .3);
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.block.-history .item .value {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  font-weight: bold;
+}
+
+.block.-history .item .value.win {
+  color: green;
+}
+
+.block.-history .item .value.lose {
+  color: red;
+}

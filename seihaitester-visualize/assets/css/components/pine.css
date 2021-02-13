@@ -1,0 +1,38 @@
+/**
+ * Block pine
+ */
+.block.-pine {
+  position: relative;
+}
+
+.block.-pine textarea {
+  height: 200px;
+}
+
+.block.-pine button {
+  position: absolute;
+  top: calc(26px + 10px);
+  right: 10px;
+  margin: 0 0 0 8px;
+  opacity: 0;
+  transition: opacity .2s ease .1s;
+  padding: 10px 10px;
+}
+
+.block.-pine button img {
+  width: 16px;
+  height: 16px;
+  vertical-align: bottom;
+}
+
+.block.-pine:hover button {
+  opacity: 1;
+}
+
+.block.-pine #output {
+  font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+}
+
+.block.-pine h2 {
+  background-image: url(../../images/icon-pine.svg);
+}

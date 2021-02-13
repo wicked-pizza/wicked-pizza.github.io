@@ -1,0 +1,11 @@
+/**
+ * Block Message
+ */
+.block.-message {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 8px 0 16px;
+  font-size: 1.4rem;
+}

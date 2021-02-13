@@ -53,6 +53,14 @@ function getISOFormat (x, tz) {
 }
 
 /**
+ * Get Title By Anago
+ * @return {String}
+ */
+function getTitleByAnago () {
+  return document.querySelector('select[name="title"]').value
+}
+
+/**
  * Trim Array
  * @param row
  * @return {Array}
@@ -61,105 +69,74 @@ function trimArray (row) {
   return row.split('\n').map(x => x.trim()).filter(x => !!x)
 }
 
-/**
- * Create History Data By Anago
- * @param list {Array}
- * @param tz {String}
- * @return {Array}
- */
-function createHistoryDataByAnago (list, tz) {
-  let result = []
-  let lastRow = ''
-  let index = 0
-  let useAction = true
-
-  list.forEach((row, i) => {
-    // 日時
-    if (/^\d{4}\//.exec(row)) {
-      lastRow = row
-    } else {
-      index++
-      const iso = getISOFormat(lastRow, myTimezone)
-      let side = null
-      let type = 'text'
-
-      if (/^\d{6}/.exec(row)) {
-        type = 'price'
-        side = /決済/.exec(list[i-2]) ? 'close' : 'open'
-
-        if (side === 'open' && /買い/.exec(row)) {
-          side = 'openbuy'
-        } else if (side === 'close' && /売り/.exec(row)) {
-          side = 'closebuy'
-        } else if (side === 'open' && /売り/.exec(row)) {
-          side = 'opensell'
-        } else if (side === 'close' && /買い/.exec(row)) {
-          side = 'closesell'
-        }
-
-        if (useAction) useAction = false
-      } else if (/^ActionType/.exec(row)) {
-        type = 'action'
-        if (/買い:/.exec(row)) {
-          side = 'openbuy'
-        } else if (/買い決済|買い全決済/.exec(row)) {
-          side = 'closebuy'
-        } else if (/売り:/.exec(row)) {
-          side = 'opensell'
-        } else if (/売り決済|売り全決済/.exec(row)) {
-          side = 'closesell'
-        }
-      } else if (/買い全決済/.exec(row)) {
-        side = 'closebuy'
-      } else if (/売り全決済/.exec(row)) {
-        side = 'closesell'
-      } else if (/ポジション無し/.exec(row)) {
-        const found = findAction(result, index)
-        result[found].side = result[found].side + '-canceled'
-      } else {
-
-      }
-
-      result.push({
-        time: iso,
-        type: type,
-        message: row,
-        side: side
-      })
-    }
-  })
-
-  result = result.filter(x => !/許容外/.exec(x.message))
-
-  if (!useAction) {
-    return result.filter(x => x.type !== 'action')
-  }
-
-  return result
+function trim (s) {
+  if (typeof s !== 'string') return s
+  return s.replace(/^\s+/, '').replace(/\s+$/, '')
 }
 
 /**
- * Find Action
- * @param {Array} array
- * @param {Number} start
- * @return {Number} found index
+ * Custom Events
  */
-function findAction (array, start) {
-  let find = 0;
+function createCustomEvents (text) {
+  if (!text) return []
+  const tz = '+0900'
 
-  for (let i = 2; i < 10; i++) {
-    c = start - i
-    item = array[c]
-    if (!item || !item.message) continue
-    if (/ActionType/.exec(item.message)) {
-      if (/close/.exec(item.side)) break
-      if (/open/.exec(item.side)) {
-        find = c
-        break
-      }
+  return text.split('\n').map((row) => {
+    const item = row.split(',').map(x => trim(x))
+    const platform = item.slice(2)
+
+    return {
+      time: `${item[0]}${tz}`,
+      message: item[1],
+      platform: platform.length > 0 ? platform : ['*'],
+      _type: 'customEvent',
+    }
+  })
+}
+
+/**
+ * Find Action By Price
+ * @param {Array} items
+ * @param {Number} start
+ * @return {Number}
+ */
+function findActionByPrice (items, start) {
+  let i = start - 1
+  for (; i > 0; i--) {
+    let item = items[i]
+    if (!item) continue
+    if (item._type === 'action') {
+      break
     }
   }
-  return find
+  return i
+}
+
+/**
+ * Find Action by Non positions
+ * @param {Array} items
+ * @param {Number} start
+ * @return {Number} found index
+ * ポジション無しの場合、直線のオーダーはキャンセルされているはずなので、
+ * キャンセルされたオーダーを特定するため、直前のオーダーの配列番号を探します
+ */
+function findActionNonpos (items, start) {
+  let i = start - 1
+
+  for (; i > 0; i--) {
+    let item = items[i]
+    if (!item || !item.side) continue
+    if (/close/.exec(item.side)) break
+    if (/open/.exec(item.side)) {
+      break
+    }
+  }
+
+  return i
+}
+
+function condStatementSingle (time) {
+  return `(time >= timestamp("${time}") and time[1] < timestamp("${time}"))`
 }
 
 /**
@@ -176,7 +153,7 @@ function condStatement (array) {
  * @param
  * @return {String}
  */
-function createOutputData (startTime, stopTime, suspention, buyEntry, buyEntryCanceled, buyHold, buyExit, buyOutOfLimit, sellEntry, sellEntryCanceled, sellHold, sellExit, sellOutOfLimit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, apiError, sfd, name) {
+function createOutputData (startTime, stopTime, suspention, buyEntry, buyEntryCanceled, buyHold, buyExit, buyOutOfLimit, sellEntry, sellEntryCanceled, sellHold, sellExit, sellOutOfLimit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, apiError, sfd, customEvents, name) {
   return `//@version=4
 study("${name}", overlay=true, max_lines_count=500, max_labels_count=500)
 
@@ -184,6 +161,7 @@ show_Line = input(true, "Lines")
 show_Autopos = input(true, "ポジション自動調整")
 show_Info = input(true, "情報")
 show_Warn = input(true, "注意")
+show_customEvents = input(true, "カスタムイベント")
 
 bool is_StartTime = ${startTime.join(' or ') || 'false'}
 bool is_StopTime = ${stopTime.join(' or ') || 'false'}
@@ -239,9 +217,9 @@ plotshape(is_Suspention, style=shape.labeldown, text="待機", color=color.purpl
 plotshape(is_StopTime, style=shape.labeldown, text="停止", color=color.orange, textcolor=color.white, location=location.bottom, size=size.tiny)
 plotshape(is_StartTime, style=shape.labeldown, text="開始", color=color.orange, textcolor=color.white, location=location.bottom, size=size.tiny)
 plotshape(is_BuyEntry, style=shape.labelup, text="買", color=color.blue, textcolor=color.white, location=location.belowbar, size=size.tiny)
-plotshape(is_BuyEntryCanceled, style=shape.labelup, text="買", color=color.gray, textcolor=color.white, location=location.belowbar, size=size.tiny)
+plotshape(is_BuyEntryCanceled, style=shape.labelup, text="買", color=#E6E6E6, textcolor=#373B41, location=location.belowbar, size=size.tiny)
 plotshape(is_SellEntry, style=shape.labeldown, text="売", color=color.red, textcolor=color.white, location=location.abovebar, size=size.tiny)
-plotshape(is_SellEntryCanceled, style=shape.labeldown, text="売", color=color.gray, textcolor=color.white, location=location.abovebar, size=size.tiny)
+plotshape(is_SellEntryCanceled, style=shape.labeldown, text="売", color=#E6E6E6, textcolor=#373B41, location=location.abovebar, size=size.tiny)
 plotshape(is_BuyExit ? high : na, style=shape.xcross, color=color.blue, location=location.absolute, size=size.tiny)
 plotshape(is_SellExit ? low : na, style=shape.xcross, color=color.red, location=location.absolute, size=size.tiny)
 
@@ -279,6 +257,8 @@ if show_Info and array.size(infoMessages) > 0
 max_bars_back(close, 1000)
 ${buyEntry.length > 0 ? 'max_bars_back(is_BuyEntry, 1000)' : ''}
 ${sellEntry.length > 0 ? 'max_bars_back(is_SellEntry, 1000)' : ''}
+
+${customEvents ? customEvents.join('\n') : ''}
 
 if show_Line and is_SellExit and not (is_SellExit and is_SellEntry)
     for i = 1 to 1000
