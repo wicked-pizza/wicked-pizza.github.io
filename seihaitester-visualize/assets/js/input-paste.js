@@ -6,8 +6,6 @@ const example = document.getElementById('example')
 const { format } = dateFns
 const now = new Date()
 
-console.log(format)
-
 button.addEventListener('click', () => {
   start()
 })

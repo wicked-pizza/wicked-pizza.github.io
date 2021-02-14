@@ -153,7 +153,7 @@ function condStatement (array) {
  * @param
  * @return {String}
  */
-function createOutputData (startTime, stopTime, suspention, buyEntry, buyEntryCanceled, buyHold, buyExit, buyOutOfLimit, sellEntry, sellEntryCanceled, sellHold, sellExit, sellOutOfLimit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, apiError, lackOfMoney, sfd, customEvents, name) {
+function createOutputData (startTime, stopTime, suspention, buyEntry, buyEntryCanceled, buyHold, buyExit, buyExitLimit, buyOutOfLimit, sellEntry, sellEntryCanceled, sellHold, sellExit, sellExitLimit, sellOutOfLimit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, apiError, lackOfMoney, sfd, customEvents, name) {
   return `//@version=4
 study("${name}", overlay=true, max_lines_count=500, max_labels_count=500)
 
@@ -170,11 +170,13 @@ bool is_BuyEntry = ${buyEntry.join(' or ') || 'false'}
 bool is_BuyEntryCanceled = ${buyEntryCanceled.join(' or ') || 'false'}
 bool is_BuyHold = ${buyHold.join(' or ') || 'false'}
 bool is_BuyExit = ${buyExit.join(' or ') || 'false'}
+bool is_BuyExitLimit = ${buyExitLimit.join(' or ') || 'false'}
 bool is_BuyOutOfLimit = ${buyOutOfLimit.join(' or ') || 'false'}
 bool is_SellEntry = ${sellEntry.join(' or ') || 'false'}
 bool is_SellEntryCanceled = ${sellEntryCanceled.join(' or ') || 'false'}
 bool is_SellHold = ${sellHold.join(' or ') || 'false'}
 bool is_SellExit = ${sellExit.join(' or ') || 'false'}
+bool is_SellExitLimit = ${sellExitLimit.join(' or ') || 'false'}
 bool is_SellOutOfLimit = ${sellOutOfLimit.join(' or ') || 'false'}
 bool is_AutoBuyPosKeep = ${autoBuyPosKeep.join(' or ') || 'false'}
 bool is_AutoSellPosKeep = ${autoSellPosKeep.join(' or ') || 'false'}
@@ -206,6 +208,12 @@ if is_BuyHold
 
 if is_SellHold
     array.push(infoMessages, 'ホールド')
+
+if is_BuyExitLimit
+    array.push(infoMessages, '買い固定幅')
+
+if is_SellExitLimit
+    array.push(infoMessages, '売り固定幅')
 
 if is_AutoBuyPosKeep
     array.push(infoMessages, 'ポジション保有中')

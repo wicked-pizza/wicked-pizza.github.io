@@ -3,7 +3,6 @@ function historyLog (items) {
   parent.innerHTML = ''
 
   backtrace(items).forEach((row) => {
-    //console.log(row)
     const el = document.createElement('div')
     el.classList.add('item')
 

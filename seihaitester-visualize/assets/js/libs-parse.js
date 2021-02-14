@@ -62,6 +62,16 @@ function parseHistoryDataByAnago (list, tz) {
       } else if (/ポジション無し/.exec(row)) {
         _canceledIndex = findActionNonpos(result, index)
         result[_canceledIndex].side = `${result[_canceledIndex].side}-canceled`
+      } else if (/:利益幅/.exec(row)) {
+        price = Number(/(\d+)/.exec(row)[1])
+        actionType = '固定利確幅'
+
+        if (/買い/.exec(row)) {
+          side = 'closebuy'
+        } else if (/売り/.exec(row)) {
+          side = 'closesell'
+        }
+
       } else {
 
       }
@@ -150,6 +160,10 @@ function dist (historyData, customEvents, name) {
     return x.side === 'closebuy'
   })
 
+  buyExitLimit = historyData.filter(x => {
+    return /買い決済:利益幅/.exec(x.message)
+  })
+
   buyHold = historyData.filter((x) => {
     return /買いホールド/.exec(x.message)
   })
@@ -164,6 +178,10 @@ function dist (historyData, customEvents, name) {
 
   sellExits = historyData.filter((x) => {
     return x.side === 'closesell'
+  })
+
+  sellExitLimit = historyData.filter(x => {
+    return /売り決済:利益幅/.exec(x.message)
   })
 
   sellHold = historyData.filter((x) => {
@@ -223,11 +241,13 @@ if show_customEvents and is_CustomEvent${i}
   buyEntriesCanceled = condStatement(buyEntriesCanceled)
   buyHold = condStatement(buyHold)
   buyExits = condStatement(buyExits)
+  buyExitLimit = condStatement(buyExitLimit)
   buyOutOfLimit = condStatement(buyOutOfLimit)
   sellEntries = condStatement(sellEntries)
   sellEntriesCanceled = condStatement(sellEntriesCanceled)
   sellHold = condStatement(sellHold)
   sellExits = condStatement(sellExits)
+  sellExitLimit = condStatement(sellExitLimit)
   sellOutOfLimit = condStatement(sellOutOfLimit)
   autoBuyPosKeep = condStatement(autoBuyPosKeep)
   autoSellPosKeep = condStatement(autoSellPosKeep)
@@ -244,11 +264,13 @@ if show_customEvents and is_CustomEvent${i}
     buyEntriesCanceled,
     buyHold,
     buyExits,
+    buyExitLimit,
     buyOutOfLimit,
     sellEntries,
     sellEntriesCanceled,
     sellHold,
     sellExits,
+    sellExitLimit,
     sellOutOfLimit,
     autoBuyPosKeep,
     autoSellPosKeep,
