@@ -212,7 +212,8 @@ function dist (historyData, customEvents, name) {
   }).map((x, i) => {
     return (`bool is_CustomEvent${i} = ${condStatementSingle(x.time)}
 if show_customEvents and is_CustomEvent${i}
-    label.new(bar_index, na, "${x.message}", color=#292A2B, textcolor=#F3F3F3, yloc=yloc.abovebar, size=size.small)`)
+    label.new(bar_index, na, "${x.message}", color=#292A2B, textcolor=#F3F3F3, yloc=yloc.abovebar, size=size.small)
+    line.new(bar_index, high, bar_index, low, color=#292A2B, extend=extend.both, style=line.style_dotted)`)
   })
 
   startTime = condStatement(startTime)
