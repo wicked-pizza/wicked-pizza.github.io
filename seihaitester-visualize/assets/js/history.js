@@ -2,7 +2,7 @@ function historyLog (items) {
   const parent = document.getElementById('history-data')
   parent.innerHTML = ''
 
-  backtrace(items).forEach((row) => {
+  backtrace(items).reverse().forEach((row) => {
     const el = document.createElement('div')
     el.classList.add('item')
 
