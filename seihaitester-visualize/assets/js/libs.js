@@ -153,7 +153,7 @@ function condStatement (array) {
  * @param
  * @return {String}
  */
-function createOutputData (startTime, stopTime, suspention, buyEntry, buyEntryCanceled, buyHold, buyExit, buyOutOfLimit, sellEntry, sellEntryCanceled, sellHold, sellExit, sellOutOfLimit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, apiError, sfd, customEvents, name) {
+function createOutputData (startTime, stopTime, suspention, buyEntry, buyEntryCanceled, buyHold, buyExit, buyOutOfLimit, sellEntry, sellEntryCanceled, sellHold, sellExit, sellOutOfLimit, autoBuyPosKeep, autoSellPosKeep, autoPosNone, apiError, lackOfMoney, sfd, customEvents, name) {
   return `//@version=4
 study("${name}", overlay=true, max_lines_count=500, max_labels_count=500)
 
@@ -180,6 +180,7 @@ bool is_AutoBuyPosKeep = ${autoBuyPosKeep.join(' or ') || 'false'}
 bool is_AutoSellPosKeep = ${autoSellPosKeep.join(' or ') || 'false'}
 bool is_AutoPosNone = ${autoPosNone.join(' or ') || 'false'}
 bool is_ApiError = ${apiError.join(' or ') || 'false'}
+bool is_LackOfMoney = ${lackOfMoney.join(' or ') || 'false'}
 bool is_Sfd = ${sfd.join(' or ') || 'false'}
 
 // Messages
@@ -190,6 +191,9 @@ color infocolor = color.gray
 
 if is_ApiError
     array.push(warnMessages, 'APIエラー')
+
+if is_LackOfMoney
+    array.push(warnMessages, '余力が不足')
 
 if is_BuyOutOfLimit
     array.push(warnMessages, '買い上限')

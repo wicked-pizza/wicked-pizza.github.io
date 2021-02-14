@@ -190,6 +190,10 @@ function dist (historyData, customEvents, name) {
     return /売り方向の数量が設定上限/.exec(x.message)
   })
 
+  lackOfMoney = historyData.filter((x) => {
+    return /取引余力が不足/.exec(x.message)
+  })
+
   apiError = historyData.filter((x) => {
     return /APIエラー/.exec(x.message)
   })
@@ -228,6 +232,7 @@ if show_customEvents and is_CustomEvent${i}
   autoSellPosKeep = condStatement(autoSellPosKeep)
   autoPosNone = condStatement(autoPosNone)
   apiError = condStatement(apiError)
+  lackOfMoney = condStatement(lackOfMoney)
   sfd = condStatement(sfd)
 
   const outputData = createOutputData(
@@ -248,6 +253,7 @@ if show_customEvents and is_CustomEvent${i}
     autoSellPosKeep,
     autoPosNone,
     apiError,
+    lackOfMoney,
     sfd,
     customEvents,
     name
