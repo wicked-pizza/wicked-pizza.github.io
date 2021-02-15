@@ -116,18 +116,44 @@ function findActionByPrice (items, start) {
  * Find Action by Non positions
  * @param {Array} items
  * @param {Number} start
- * @return {Number} found index
+ * @return {[Number, Boolean]} [found index, found?]
  * ポジション無しの場合、直線のオーダーはキャンセルされているはずなので、
  * キャンセルされたオーダーを特定するため、直前のオーダーの配列番号を探します
  */
 function findActionNonpos (items, start) {
   let i = start - 1
+  let found = false
 
   for (; i > 0; i--) {
     let item = items[i]
     if (!item || !item.side) continue
     if (/close/.exec(item.side)) break
     if (/open/.exec(item.side)) {
+      found = true
+      break
+    }
+  }
+
+  return [i, found]
+}
+
+/**
+ * Find Cancled Order
+ * @param {Array} items
+ * @param {Number} start
+ * @return {Number} Found Index 見つからなかった場合は 0 が返る
+ * ポジション無しのあとに、ポジション保有中がある場合 -canceled を外す必要がある
+ * その妥当性をチェックするため、-canceled のついたオーダーを探す
+ */
+function findCanceledOrder (items, start) {
+  let i = start - 1
+  let found = false
+
+  for (; i >= 0; i--) {
+    let item = items[i]
+    if (!item || !item.side) continue
+    if (/-canceled/.exec(item.side)) {
+      found = true
       break
     }
   }
@@ -269,8 +295,8 @@ if show_Info and array.size(infoMessages) > 0
 max_bars_back(close, 1000)
 ${buyEntry.length > 0 ? 'max_bars_back(is_BuyEntry, 1000)' : ''}
 ${sellEntry.length > 0 ? 'max_bars_back(is_SellEntry, 1000)' : ''}
-${buyExit.length > 0 ? 'max_bars_back(is_SellEntry, 1000)' : ''}
-${sellExit.length > 0 ? 'max_bars_back(is_BuyEntry, 1000)' : ''}
+${buyExit.length > 0 ? 'max_bars_back(is_BuyExit, 1000)' : ''}
+${sellExit.length > 0 ? 'max_bars_back(is_SellExit, 1000)' : ''}
 
 ${customEvents ? customEvents.join('\n') : ''}
 

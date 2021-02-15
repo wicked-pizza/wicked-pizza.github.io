@@ -40,9 +40,11 @@ function htmlCloseOrder (data) {
   const openVolume = Math.round(data.openOrder.volume * 100) / 100
 
   return `
-   <div class="open">${data.openOrder.side} @ ${openVolume}</div>
-   <div class="name">→ ${data.side} @ ${volume}</div>
-   <div class="value ${valueClass}">${value}</div>
+    <div>決済</div>
+    <div class="open">${data.openOrder.side} @ ${openVolume}</div>
+    <div class="name">→ ${data.side} @ ${volume}</div>
+    <div class="value ${valueClass}">${value}</div>
+    <div class="date">${format(new Date(data.time), 'YYYY年MM月DD日 HH:mm')}</div>
  `
 }
 

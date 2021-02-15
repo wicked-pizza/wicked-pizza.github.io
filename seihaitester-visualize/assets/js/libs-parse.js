@@ -60,8 +60,17 @@ function parseHistoryDataByAnago (list, tz) {
       } else if (/売り全決済/.exec(row)) {
         side = 'closesell'
       } else if (/ポジション無し/.exec(row)) {
-        _canceledIndex = findActionNonpos(result, index)
-        result[_canceledIndex].side = `${result[_canceledIndex].side}-canceled`
+        [_foundIndex, _found] = findActionNonpos(result, index)
+        if (_found) {
+          result[_foundIndex].side = `${result[_foundIndex].side}-canceled`
+        }
+      } else if (/買いポジション保有中/.exec(row)) {
+        // ポジション無しのあと、ポジション保有中の場合は -canceled を外す
+        if (/ポジション無し/.exec(result[index - 2].message)) {
+          _foundIndex = findCanceledOrder(result, index)
+          result[_foundIndex].side = result[_foundIndex].side.replace('-canceled', '')
+        }
+
       } else if (/:利益幅/.exec(row)) {
         price = Number(/(\d+)/.exec(row)[1])
         actionType = '固定利確幅'
