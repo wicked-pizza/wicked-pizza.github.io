@@ -163,27 +163,27 @@ show_Info = input(true, "情報")
 show_Warn = input(true, "注意")
 show_customEvents = input(true, "カスタムイベント")
 
-bool is_StartTime = ${startTime.join(' or ') || 'false'}
-bool is_StopTime = ${stopTime.join(' or ') || 'false'}
-bool is_Suspention = ${suspention.join(' or ') || 'false'}
-bool is_BuyEntry = ${buyEntry.join(' or ') || 'false'}
-bool is_BuyEntryCanceled = ${buyEntryCanceled.join(' or ') || 'false'}
-bool is_BuyHold = ${buyHold.join(' or ') || 'false'}
-bool is_BuyExit = ${buyExit.join(' or ') || 'false'}
-bool is_BuyExitLimit = ${buyExitLimit.join(' or ') || 'false'}
-bool is_BuyOutOfLimit = ${buyOutOfLimit.join(' or ') || 'false'}
-bool is_SellEntry = ${sellEntry.join(' or ') || 'false'}
-bool is_SellEntryCanceled = ${sellEntryCanceled.join(' or ') || 'false'}
-bool is_SellHold = ${sellHold.join(' or ') || 'false'}
-bool is_SellExit = ${sellExit.join(' or ') || 'false'}
-bool is_SellExitLimit = ${sellExitLimit.join(' or ') || 'false'}
-bool is_SellOutOfLimit = ${sellOutOfLimit.join(' or ') || 'false'}
-bool is_AutoBuyPosKeep = ${autoBuyPosKeep.join(' or ') || 'false'}
-bool is_AutoSellPosKeep = ${autoSellPosKeep.join(' or ') || 'false'}
-bool is_AutoPosNone = ${autoPosNone.join(' or ') || 'false'}
-bool is_ApiError = ${apiError.join(' or ') || 'false'}
-bool is_LackOfMoney = ${lackOfMoney.join(' or ') || 'false'}
-bool is_Sfd = ${sfd.join(' or ') || 'false'}
+bool is_StartTime = ${startTime.join(' or ') || 'na'}
+bool is_StopTime = ${stopTime.join(' or ') || 'na'}
+bool is_Suspention = ${suspention.join(' or ') || 'na'}
+bool is_BuyEntry = ${buyEntry.join(' or ') || 'na'}
+bool is_BuyEntryCanceled = ${buyEntryCanceled.join(' or ') || 'na'}
+bool is_BuyHold = ${buyHold.join(' or ') || 'na'}
+bool is_BuyExit = ${buyExit.join(' or ') || 'na'}
+bool is_BuyExitLimit = ${buyExitLimit.join(' or ') || 'na'}
+bool is_BuyOutOfLimit = ${buyOutOfLimit.join(' or ') || 'na'}
+bool is_SellEntry = ${sellEntry.join(' or ') || 'na'}
+bool is_SellEntryCanceled = ${sellEntryCanceled.join(' or ') || 'na'}
+bool is_SellHold = ${sellHold.join(' or ') || 'na'}
+bool is_SellExit = ${sellExit.join(' or ') || 'na'}
+bool is_SellExitLimit = ${sellExitLimit.join(' or ') || 'na'}
+bool is_SellOutOfLimit = ${sellOutOfLimit.join(' or ') || 'na'}
+bool is_AutoBuyPosKeep = ${autoBuyPosKeep.join(' or ') || 'na'}
+bool is_AutoSellPosKeep = ${autoSellPosKeep.join(' or ') || 'na'}
+bool is_AutoPosNone = ${autoPosNone.join(' or ') || 'na'}
+bool is_ApiError = ${apiError.join(' or ') || 'na'}
+bool is_LackOfMoney = ${lackOfMoney.join(' or ') || 'na'}
+bool is_Sfd = ${sfd.join(' or ') || 'na'}
 
 // Messages
 warnMessages = array.new_string()
@@ -269,6 +269,8 @@ if show_Info and array.size(infoMessages) > 0
 max_bars_back(close, 1000)
 ${buyEntry.length > 0 ? 'max_bars_back(is_BuyEntry, 1000)' : ''}
 ${sellEntry.length > 0 ? 'max_bars_back(is_SellEntry, 1000)' : ''}
+${buyExit.length > 0 ? 'max_bars_back(is_SellEntry, 1000)' : ''}
+${sellExit.length > 0 ? 'max_bars_back(is_BuyEntry, 1000)' : ''}
 
 ${customEvents ? customEvents.join('\n') : ''}
 
