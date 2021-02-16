@@ -12,6 +12,15 @@ function historyLog (items) {
       case 'price':
         if (/close/.exec(row.side)) {
           el.innerHTML = htmlCloseOrder(row)
+          el.classList.add('close')
+          parent.appendChild(el)
+        } else if (/open/.exec(row.side)) {
+          console.log(row.side)
+          el.classList.add('open')
+          el.innerHTML = `
+            <div>新規</div>
+            <div class="open">${row.side} @ ${row.volume}</div>
+          `
           parent.appendChild(el)
         }
         break
@@ -44,7 +53,7 @@ function htmlCloseOrder (data) {
     <div class="open">${data.openOrder.side} @ ${openVolume}</div>
     <div class="name">→ ${data.side} @ ${volume}</div>
     <div class="value ${valueClass}">${value}</div>
-    <div class="date">${format(new Date(data.time), 'YYYY年MM月DD日 HH:mm')}</div>
+    <div class="date">${format(new Date(data.time), 'YYYY年MM月DD日 HH:mm:ss')}</div>
  `
 }
 
