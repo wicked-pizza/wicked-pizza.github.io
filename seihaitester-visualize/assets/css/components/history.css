@@ -26,11 +26,52 @@
 
 .block.-history .item {
   position: relative;
-  padding: 8px 0;
+  margin: 0 0 0 16px;
+  padding: 8px 0 8px;
   /*border-bottom: 1px solid rgba(255, 255, 255, .3);*/
   border-bottom: 1px solid rgba(0, 0, 0, .3);
+  box-sizing: border-box;
   font-size: 1.2rem;
   line-height: 1.5;
+}
+
+.block.-history .item::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: -22px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  background-size: 20px auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.block.-history .item::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -15px;
+  width: 1px;
+  height: calc(100% + 1px);
+  border-left: 1px solid gray;
+}
+
+.block.-history .item.open::before,
+.block.-history .item.close::before {
+  background-color: white;
+  border-radius: 50%;
+}
+
+.block.-history .item.open::before {
+  background-image: url(../../images/icon-plus.svg);
+}
+
+.block.-history .item.close::before {
+  background-image: url(../../images/icon-minus.svg);
 }
 
 .block.-history .item .value {
